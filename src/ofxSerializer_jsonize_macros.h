@@ -12,7 +12,7 @@ for(var n = 1, args_ = []; n <= 20; n++) {
 var str = "#define Select(" + args_.map(function(x) { return "_" + x; }).join(", ") + ", name, ...) name";
 console.log(str);
 
-str = "#define Stringify(...) Select(__VA_ARGS__, " + args_.reverse().map(function(n) { return "str_impl" + n; }).join(", ") + ") (__VA_ARGS__)";
+str = "#define MakeStringifiedPair(...) Select(__VA_ARGS__, " + args_.reverse().map(function(n) { return "str_impl" + n; }).join(", ") + ") (__VA_ARGS__)";
 console.log(str);
 */
 
