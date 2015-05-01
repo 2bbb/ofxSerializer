@@ -98,6 +98,22 @@ inline void serialize(std::ostream &os, const std::string &v) {
     os.write(v.c_str(), v.length() + 1);
 }
 
+// pointer
+template <typename T>
+inline void serialize(std::ostream &os, T *v) {
+    bool b = v != NULL;
+    serialize(os, b);
+    if(b) serialize(os, *v);
+}
+
+// shared_ptr
+template <typename T>
+inline void serialize(std::ostream &os, shared_ptr<T> v) {
+    bool b = static_cast<bool>(v);
+    serialize(os, b);
+    if(b) serialize(os, *(v->get()));
+}
+
 // container of number
 template <typename T, typename Alloc, template<typename, typename> class Container>
 inline typename util::enable_if<util::is_arithmetic<T>::value>::type serialize(std::ostream &os, const Container<T, Alloc> &v) {
@@ -154,6 +170,23 @@ inline void deserialize(std::istream &is, std::string &v) {
     is.read((char *)(v.data()), length);
 }
 
+// pointer
+template <typename T>
+inline void deserialize(std::istream &is, T* &v) {
+    bool b;
+    deserialize(is, b);
+    if(v == NULL) v = new T;
+    if(b) deserialize(is, *v);
+}
+
+// shared_ptr
+template <typename T>
+inline void deserialize(std::istream &is, shared_ptr<T> &v) {
+    bool b;
+    deserialize(is, b);
+    if(!v) v = shared_ptr<T>(new T);
+    if(b) deserialize(is, *(v->get()));
+}
 
 // container of number
 template <typename T, typename Alloc, template<typename, typename> class Container>
