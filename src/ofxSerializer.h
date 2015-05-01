@@ -70,6 +70,9 @@ namespace {
 template <typename T>
 inline typename util::enable_if<has_serialize_impl<T>::value>::type
 serialize(std::ostream &os, const T &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "serializable";
+#endif
     v.serialize(os);
 }
 
@@ -77,48 +80,76 @@ serialize(std::ostream &os, const T &v) {
 template <typename T>
 inline typename util::enable_if<util::is_arithmetic<T>::value>::type
 serialize(std::ostream &os, T v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "number " << v;
+#endif
     os.write((char *)(&v), sizeof(T));
 }
 
 // object
 template <typename T>
-inline typename util::enable_if<!util::is_arithmetic<T>::value && !has_serialize_impl<T>::value>::type
+inline typename util::enable_if<!util::is_arithmetic<T>::value && !has_serialize_impl<T>::value && !util::is_array<T>::value && !util::is_pointer<T>::value>::type
 serialize(std::ostream &os, const T &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "object";
+#endif
     os.write((char *)(&v), sizeof(T));
 }
 
 // string
 inline void serialize(std::ostream &os, const std::string &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "string";
+#endif
     serialize(os, v.length() + 1);
     os.write(v.c_str(), v.length() + 1);
 }
 
 // pointer
 template <typename T>
-inline void serialize(std::ostream &os, T *v) {
-    bool b = v != NULL;
-    serialize(os, b);
-    if(b) serialize(os, *v);
+inline typename util::enable_if<!util::is_array<T>::value && util::is_pointer<T>::value>::type serialize(std::ostream &os, const T &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "pointer " << v;
+#endif
+    serialize(os, static_cast<bool>(v != NULL));
+    if(static_cast<bool>(v != NULL)) serialize(os, *v);
 }
 
 // shared_ptr
 template <typename T>
-inline void serialize(std::ostream &os, shared_ptr<T> v) {
-    bool b = static_cast<bool>(v);
-    serialize(os, b);
-    if(b) serialize(os, *(v->get()));
+inline void serialize(std::ostream &os, shared_ptr<T> &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "shared_ptr";
+#endif
+    serialize(os, static_cast<bool>(v));
+    if(static_cast<bool>(v)) serialize(os, *(v->get()));
+}
+
+// array
+template <typename T>
+inline typename util::enable_if<!util::is_arithmetic<T>::value && util::is_array<T>::value>::type serialize(std::ostream &os, T &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "array " << util::length(v) << endl;
+#endif
+    for(size_t i = 0; i < util::length(v); i++) serialize(os, v[i]);
 }
 
 // container of number
 template <typename T, typename Alloc, template<typename, typename> class Container>
 inline typename util::enable_if<util::is_arithmetic<T>::value>::type serialize(std::ostream &os, const Container<T, Alloc> &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "container of number";
+#endif
     serialize(os, v.size());
     os.write((char *)(&v[0]), sizeof(T) * v.size());
 }
 
 // container of object
 template <typename T, typename Alloc, template<typename, typename> class Container>
-inline typename util::enable_if<!util::is_arithmetic<T>::value>::type serialize(std::ostream &os, const Container<T, Alloc> &v) {
+inline typename util::enable_if<!util::is_arithmetic<T>::value && !util::is_pointer<T>::value>::type serialize(std::ostream &os, const Container<T, Alloc> &v) {
+#if DEBUG_SERIALIZE
+    ofLogNotice("debug/serialize") << "container of object";
+#endif
     serialize(os, v.size());
     for(size_t i = 0; i < v.size(); i++) serialize(os, v[i]);
 }
@@ -151,7 +182,7 @@ deserialize(std::istream &is, T &v) {
 
 // object
 template <typename T>
-inline typename util::enable_if<!util::is_arithmetic<T>::value && !has_deserialize_impl<T>::value>::type
+inline typename util::enable_if<!util::is_arithmetic<T>::value && !has_deserialize_impl<T>::value && !util::is_array<T>::value && !util::is_pointer<T>::value>::type
 deserialize(std::istream &is, T &v) {
     is.read((char *)(&v), sizeof(T));
 }
@@ -167,11 +198,13 @@ inline void deserialize(std::istream &is, std::string &v) {
 
 // pointer
 template <typename T>
-inline void deserialize(std::istream &is, T* &v) {
+inline typename util::enable_if<!util::is_array<T>::value && util::is_pointer<T>::value>::type deserialize(std::istream &is, T &v) {
     bool b;
     deserialize(is, b);
-    if(v == NULL) v = new T;
-    if(b) deserialize(is, *v);
+    if(b) {
+        if(v == NULL) v = new typename util::remove_pointer<T>::type;
+        deserialize(is, *v);
+    }
 }
 
 // shared_ptr
@@ -179,8 +212,18 @@ template <typename T>
 inline void deserialize(std::istream &is, shared_ptr<T> &v) {
     bool b;
     deserialize(is, b);
-    if(!v) v = shared_ptr<T>(new T);
-    if(b) deserialize(is, *(v->get()));
+    if(b) {
+        if(!v) v = shared_ptr<T>(new T);
+        deserialize(is, *(v->get()));
+    }
+}
+
+// array
+template <typename T>
+inline typename util::enable_if<!util::is_arithmetic<T>::value && util::is_array<T>::value>::type deserialize(std::istream &is, T &v) {
+    for(size_t i = 0; i < util::length(v); i++) {
+        deserialize(is, v[i]);
+    }
 }
 
 // container of number

@@ -46,7 +46,7 @@ template <> struct is_arithmetic<Type> { static const bool value = true; };
     template <bool b, typename T = void> struct enable_if;
     
     template <typename T>
-    struct enable_if<true, T> { typedef void type; };
+    struct enable_if<true, T> { typedef T type; };
     
     template <typename T>
     struct remove_const {
@@ -74,5 +74,38 @@ template <> struct is_arithmetic<Type> { static const bool value = true; };
     struct add_lvalue_reference<T &> {
         typedef T type;
     };
+    
+    
+#pragma mark utilities for array
+
+    template<typename T>
+    struct is_pointer { static const bool value = false; };
+    
+    template<typename T>
+    struct is_pointer<T *> { static const bool value = true; };
+    
+    template<typename, unsigned = 0>
+    struct extent;
+    
+    template<typename, unsigned _Uint>
+    struct extent { static const std::size_t value = 0; };
+	   
+    template<typename _Tp, unsigned _Uint, std::size_t _Size>
+    struct extent<_Tp[_Size], _Uint> {
+        static const std::size_t value = _Uint == 0 ? _Size : extent<_Tp, _Uint - 1>::value;
+    };
+    
+    template<typename _Tp, unsigned _Uint>
+    struct extent<_Tp[], _Uint> {
+        static const std::size_t value = _Uint == 0 ? 0 : extent<_Tp, _Uint - 1>::value;
+    };
+    
+    template<class T>
+    struct is_array { static const bool value = 0 < util::extent<T>::value; };
+    
+    template <typename T>
+    size_t length(T &t) {
+        return util::extent<T>::value;
+    }
 };
 

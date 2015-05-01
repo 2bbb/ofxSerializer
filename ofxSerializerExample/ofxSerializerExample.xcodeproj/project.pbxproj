@@ -135,10 +135,10 @@
 		95DEA2AC1AF3723700ED9226 /* details */ = {
 			isa = PBXGroup;
 			children = (
+				95DEA2B01AF3723700ED9226 /* serialize.h */,
 				95DEA2AD1AF3723700ED9226 /* deserialize.h */,
 				95DEA2AE1AF3723700ED9226 /* jsonize.h */,
 				95DEA2AF1AF3723700ED9226 /* jsonize_macros.h */,
-				95DEA2B01AF3723700ED9226 /* serialize.h */,
 				95DEA2B11AF3723700ED9226 /* utils.h */,
 			);
 			path = details;

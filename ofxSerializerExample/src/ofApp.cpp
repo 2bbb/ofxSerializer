@@ -2,16 +2,17 @@
 #include "ofxSerializer.h"
 
 struct Serializable {
-    
     int id;
     string name;
     vector<ofPoint> points;
     float lifeTime;
     Serializable *next;
+    int nums[3];
     
     Serializable() : next(NULL)  {};
     
-    DefineSerializeMethod(id, name, points, lifeTime, next);
+//    DefineSerializeMethod(id, name, points, lifeTime, nums);
+    DefineSerializeMethod(id, name, points, lifeTime, next, nums);
 };
 
 struct DerivedSerializable : Serializable {
@@ -34,6 +35,9 @@ void SerializeDefinedStructTest() {
     for(int i = 0; i < 10; i++) encode1.points.push_back(ofPoint(i, 2 * i));
     encode1.lifeTime = 10.0f;
     encode1.next = encode2;
+    encode1.nums[0] = 1;
+    encode1.nums[1] = 2;
+    encode1.nums[2] = 3;
     
     encode2->id = 2;
     encode2->name = "decode2";
@@ -48,26 +52,30 @@ void SerializeDefinedStructTest() {
     ofLogNotice("SerializeDefinedStructTest")
         << decode.id << ", "
         << decode.name << ", "
-        << decode.lifeTime;
+        << decode.lifeTime << ", "
+        << decode.nums[0] << ", "
+        << decode.nums[1] << ", "
+        << decode.nums[2];
     for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i].x << ", " << decode.points[i].y << ") ,";
     cout << endl;
     ofLogNotice("SerializeDefinedStructTest")
         << decode.next->id << ", "
         << decode.next->name << ", "
         << decode.next->lifeTime;
-
-    decode.loadFromFile("encode1.serialized");
+    
+    DerivedSerializable derivedDecode;
+    derivedDecode.loadFromFile("encode1.serialized");
     
     ofLogNotice("SerializeDefinedStructTest")
-        << decode.id << ", "
-        << decode.name << ", "
-        << decode.lifeTime;
-    for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i].x << ", " << decode.points[i].y << ") ,";
+        << derivedDecode.id << ", "
+        << derivedDecode.name << ", "
+        << derivedDecode.lifeTime;
+    for(int i = 0; i < derivedDecode.points.size(); i++) cout << "(" << derivedDecode.points[i].x << ", " << derivedDecode.points[i].y << ") ,";
     cout << endl;
     ofLogNotice("SerializeDefinedStructTest")
-        << decode.next->id << ", "
-        << decode.next->name << ", "
-        << decode.next->lifeTime;
+        << derivedDecode.next->id << ", "
+        << derivedDecode.next->name << ", "
+        << derivedDecode.next->lifeTime;
 }
 
 struct W {
