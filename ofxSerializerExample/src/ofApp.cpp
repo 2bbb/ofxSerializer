@@ -1,26 +1,23 @@
 #include "ofMain.h"
 #include "ofxSerializer.h"
 
-struct X {
-    float x, y;
-    int z;
+struct Serializable {
     
-    std::vector<int> ws;
-    std::string s, t;
-    std::vector<std::string> ss;
+    int id;
+    string name;
+    vector<ofPoint> points;
+    float lifeTime;
+    Serializable *next;
     
-    X() {};
-    X(float x, float y, int z, const std::string &s, const std::string &t)
-    : x(x), y(y), z(z), s(s), t(t) {};
+    Serializable() : next(NULL)  {};
     
-    DefineSerializeMethod(x, y, z, s, t, ws, ss);
+    DefineSerializeMethod(id, name, points, lifeTime, next);
 };
 
-struct Y : X {
-    Y(float x, float y, int z, const std::string &s, const std::string &t, float p, float q)
-    : X(x, y, z, s, t), p(p), q(q) {};
-    float p, q;
-    DefineSerializeMethod(Super(X, Y), p, q);
+struct DerivedSerializable : Serializable {
+    ofRectangle space;
+    
+    DefineSerializeMethod(Super(Serializable, DerivedSerializable), space);
 };
 
 struct Z {
@@ -30,21 +27,33 @@ struct Z {
 DefineSerializeFunction(Z, v, v.x, v.y);
 
 void SerializeDefinedStructTest() {
+    Serializable encode1, *encode2 = new Serializable;
+    
+    encode1.id = 1;
+    encode1.name = "decode1";
+    for(int i = 0; i < 10; i++) encode1.points.push_back(ofPoint(i, 2 * i));
+    encode1.lifeTime = 10.0f;
+    encode1.next = encode2;
+    
+    encode2->id = 2;
+    encode2->name = "decode2";
+    encode2->next = NULL;
+    
     stringstream s("");
-    X x(1.0f, 2.0f, 3, "abcdefgh", "0123456");
-    Y y(0.0f, 0.0f, 0, "", "", 1.0f, 2.0f);
+    encode1.serialize(s);
+    Serializable decode;
+    decode.deserialize(s);
     
-    for(int i = 0; i < 100; i++) x.ws.push_back(i);
-    x.ss.push_back("123");
-    x.ss.push_back("456");
-    x.ss.push_back("789abcdef");
-    x.serialize(s);
-    
-    y.deserialize(s);
-    ofLogNotice("SerializeDefinedStructTest") << y.x << ", " << y.y << ", " << y.z << ", " << y.s << ", " << y.t;
-    for(size_t i = 0; i < y.ws.size(); i++) cout << y.ws[i] << ", ";
-    for(size_t i = 0; i < y.ss.size(); i++) cout << y.ss[i] << ", ";
-    ofLogNotice("SerializeDefinedStructTest") << y.p << ", " << y.q;
+    ofLogNotice("SerializeDefinedStructTest")
+        << decode.id << ", "
+        << decode.name << ", "
+        << decode.lifeTime;
+    for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i].x << ", " << decode.points[i].y << ") ,";
+    cout << endl;
+    ofLogNotice("SerializeDefinedStructTest")
+        << decode.next->id << ", "
+        << decode.next->name << ", "
+        << decode.next->lifeTime;
 }
 
 struct W {
@@ -59,6 +68,7 @@ void OtherStructTest() {
     
     ofxSerializer::serialize(s, w1);
     ofxSerializer::deserialize(s, w2);
+    
     ofLogNotice("OtherStructTest") << w1.z.x << ", " << w1.z.y;
     ofLogNotice("OtherStructTest") << w2.z.x << ", " << w2.z.y;
 }
@@ -66,6 +76,7 @@ void OtherStructTest() {
 struct Jsonizable {
     float p, q;
     vector<string> ss;
+    
     DefineJsonizeMethod(p, q, ss);
 };
 
