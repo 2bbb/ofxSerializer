@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>51C943E8-3540-4E8A-A631-4D9A463C1F29</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ofxSerializerExample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>5B53ABB748BE3644C7D419CBEC965E83900D8CB3</key>
+		<string>github.com:2bbb/ofxSerializer.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ofxSerializerExample/ofxSerializerExample.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>5B53ABB748BE3644C7D419CBEC965E83900D8CB3</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:2bbb/ofxSerializer.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>5B53ABB748BE3644C7D419CBEC965E83900D8CB3</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5B53ABB748BE3644C7D419CBEC965E83900D8CB3</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxSerializer</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -17,7 +17,7 @@
 #define BEGIN_NAMESPACE(name) namespace name {
 #define END_NAMESPACE(name) };
 
-#include "ofxSerializer_utils.h"
+#include "details/utils.h"
 
 BEGIN_NAMESPACE(ofx)
 BEGIN_NAMESPACE(Serializer)
@@ -120,7 +120,7 @@ inline void serialize(std::ostream &os, const Arg &arg, const Args& ... args) {
     serialize(os, args ...);
 }
 #else
-#include "ofxSerializer_serialize_detail.h"
+#include "details/serialize.h"
 #endif
 
 #pragma mark Deserialize
@@ -186,7 +186,7 @@ inline void deserialize(std::istream &is, Arg &arg, Args& ... args) {
     deserialize(is, args ...);
 }
 #else
-#include "ofxSerializer_deserialize_detail.h"
+#include "details/deserialize.h"
 #endif
 
 #pragma mark Jsonizer
@@ -266,7 +266,7 @@ inline void jsonize(std::ostream &os, const char * const key, const Arg1 &v, con
     jsonize(os << ", ", key2, v2, args ...);
 };
 #else
-#include "ofxSerializer_jsonize_detail.h"
+#include "details/jsonize.h"
 #endif
 
 END_NAMESPACE(Serializer)
@@ -312,7 +312,7 @@ static_cast<Type &>( \
     >(*this) \
 )
 
-#include "ofxSerializer_jsonize_macros.h"
+#include "details/jsonize_macros.h"
 
 #define DefineJsonizeMethod(...) \
 inline void jsonize(std::ostream &os) const { \
@@ -320,3 +320,9 @@ inline void jsonize(std::ostream &os) const { \
     ofxSerializer::jsonize(os, MakeStringifiedPair(__VA_ARGS__)); \
     os << "}"; \
 };
+
+DefineSerializeFunction(ofVec2f, p, p.x, p.y);
+DefineSerializeFunction(ofVec3f, p, p.x, p.y, p.z);
+DefineSerializeFunction(ofVec4f, p, p.x, p.y, p.z, p.w);
+DefineSerializeFunction(ofColor, c, c.r, c.g, c.b, c.a);
+DefineSerializeFunction(ofRectangle, rect, rect.x, rect.y, rect.width, rect.height);

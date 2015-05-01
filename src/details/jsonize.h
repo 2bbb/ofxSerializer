@@ -1,3 +1,16 @@
+/*
+for(var i = 2; i <= 20; i++) {
+    var args = [];
+    for(var j = 0; j < i; j++) args.push(j);
+    var str = "template <" + args.map(function(n) { return "typename Arg" + n; }).join(", ") + ">\n"
+            + "inline void jsonize(std::ostream &os, " + args.map(function(n) { return "const char * const key" + n + ", const Arg" + n + " &arg" + n; }).join(", ") + ") {\n"
+            + "    jsonize(os, key0, arg0);\n"
+            + "    jsonize(os << \", \", " + args.slice(1).map(function(n) { return "key" + n + ", arg" + n; }).join(", ") + ");\n"
+            + "}";
+    console.log(str);
+}
+*/
+
 template <typename Arg0, typename Arg1>
 inline void jsonize(std::ostream &os, const char * const key0, const Arg0 &arg0, const char * const key1, const Arg1 &arg1) {
     jsonize(os, key0, arg0);
