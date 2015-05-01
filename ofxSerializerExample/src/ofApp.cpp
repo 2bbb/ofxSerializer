@@ -41,8 +41,22 @@ void SerializeDefinedStructTest() {
     
     stringstream s("");
     encode1.serialize(s);
+    encode1.saveToFile("encode1.serialized");
     Serializable decode;
     decode.deserialize(s);
+    
+    ofLogNotice("SerializeDefinedStructTest")
+        << decode.id << ", "
+        << decode.name << ", "
+        << decode.lifeTime;
+    for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i].x << ", " << decode.points[i].y << ") ,";
+    cout << endl;
+    ofLogNotice("SerializeDefinedStructTest")
+        << decode.next->id << ", "
+        << decode.next->name << ", "
+        << decode.next->lifeTime;
+
+    decode.loadFromFile("encode1.serialized");
     
     ofLogNotice("SerializeDefinedStructTest")
         << decode.id << ", "
