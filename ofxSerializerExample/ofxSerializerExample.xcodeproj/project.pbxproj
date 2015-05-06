@@ -59,11 +59,12 @@
 
 /* Begin PBXFileReference section */
 		95B57C0E1AEFAEC2008F3C14 /* ofxSerializer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSerializer.h; sourceTree = "<group>"; };
-		95DEA2AD1AF3723700ED9226 /* deserialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deserialize.h; sourceTree = "<group>"; };
-		95DEA2AE1AF3723700ED9226 /* jsonize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsonize.h; sourceTree = "<group>"; };
+		95DEA2AD1AF3723700ED9226 /* deserialize_oldcpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deserialize_oldcpp.h; sourceTree = "<group>"; };
+		95DEA2AE1AF3723700ED9226 /* jsonize_oldcpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsonize_oldcpp.h; sourceTree = "<group>"; };
 		95DEA2AF1AF3723700ED9226 /* jsonize_macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsonize_macros.h; sourceTree = "<group>"; };
-		95DEA2B01AF3723700ED9226 /* serialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = serialize.h; sourceTree = "<group>"; };
+		95DEA2B01AF3723700ED9226 /* serialize_oldcpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = serialize_oldcpp.h; sourceTree = "<group>"; };
 		95DEA2B11AF3723700ED9226 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		95DEA2B21AF4C74E00ED9226 /* jsonize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsonize.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -135,9 +136,10 @@
 		95DEA2AC1AF3723700ED9226 /* details */ = {
 			isa = PBXGroup;
 			children = (
-				95DEA2B01AF3723700ED9226 /* serialize.h */,
-				95DEA2AD1AF3723700ED9226 /* deserialize.h */,
-				95DEA2AE1AF3723700ED9226 /* jsonize.h */,
+				95DEA2B01AF3723700ED9226 /* serialize_oldcpp.h */,
+				95DEA2AD1AF3723700ED9226 /* deserialize_oldcpp.h */,
+				95DEA2B21AF4C74E00ED9226 /* jsonize.h */,
+				95DEA2AE1AF3723700ED9226 /* jsonize_oldcpp.h */,
 				95DEA2AF1AF3723700ED9226 /* jsonize_macros.h */,
 				95DEA2B11AF3723700ED9226 /* utils.h */,
 			);

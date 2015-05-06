@@ -10,9 +10,7 @@
 
 namespace util {
     template <typename T>
-    struct is_arithmetic {
-        static const bool value = false;
-    };
+    struct is_arithmetic { static const bool value = false; };
     
 #define IsArithmetic(Type) \
 template <> struct is_arithmetic<Type> { static const bool value = true; };
@@ -35,13 +33,9 @@ template <> struct is_arithmetic<Type> { static const bool value = true; };
 #undef IsArithmetic
     
     template <typename T, typename U>
-    struct is_same {
-        static const bool value = false;
-    };
+    struct is_same { static const bool value = false; };
     template <typename T>
-    struct is_same<T, T> {
-        static const bool value = true;
-    };
+    struct is_same<T, T> { static const bool value = true; };
     
     template <bool b, typename T = void> struct enable_if;
     
@@ -49,31 +43,19 @@ template <> struct is_arithmetic<Type> { static const bool value = true; };
     struct enable_if<true, T> { typedef T type; };
     
     template <typename T>
-    struct remove_const {
-        typedef T type;
-    };
+    struct remove_const { typedef T type; };
     template <typename T>
-    struct remove_const<const T> {
-        typedef T type;
-    };
+    struct remove_const<const T> { typedef T type; };
     
     template <typename T>
-    struct remove_pointer {
-        typedef T type;
-    };
+    struct remove_pointer { typedef T type; };
     template <typename T>
-    struct remove_pointer<T *> {
-        typedef T type;
-    };
+    struct remove_pointer<T *> { typedef T type; };
     
     template <typename T>
-    struct add_lvalue_reference {
-        typedef T& type;
-    };
+    struct add_lvalue_reference { typedef T& type; };
     template <typename T>
-    struct add_lvalue_reference<T &> {
-        typedef T type;
-    };
+    struct add_lvalue_reference<T &> { typedef T type; };
     
     
 #pragma mark utilities for array
@@ -104,8 +86,6 @@ template <> struct is_arithmetic<Type> { static const bool value = true; };
     struct is_array { static const bool value = 0 < util::extent<T>::value; };
     
     template <typename T>
-    size_t length(T &t) {
-        return util::extent<T>::value;
-    }
+    size_t length(T &t) { return util::extent<T>::value; }
 };
 
