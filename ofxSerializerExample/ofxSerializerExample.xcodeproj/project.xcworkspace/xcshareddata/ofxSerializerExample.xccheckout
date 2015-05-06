@@ -10,6 +10,8 @@
 	<string>ofxSerializerExample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>37526DA425E5430474A14FBFA1BC4525160B5FC1</key>
+		<string>github.com:kylemcdonald/ofxCv.git</string>
 		<key>5B53ABB748BE3644C7D419CBEC965E83900D8CB3</key>
 		<string>github.com:2bbb/ofxSerializer.git</string>
 	</dict>
@@ -17,6 +19,8 @@
 	<string>ofxSerializerExample/ofxSerializerExample.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>37526DA425E5430474A14FBFA1BC4525160B5FC1</key>
+		<string>../../../../ofxCv</string>
 		<key>5B53ABB748BE3644C7D419CBEC965E83900D8CB3</key>
 		<string>../../..</string>
 	</dict>
@@ -28,6 +32,14 @@
 	<string>5B53ABB748BE3644C7D419CBEC965E83900D8CB3</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>37526DA425E5430474A14FBFA1BC4525160B5FC1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxCv</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

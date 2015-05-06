@@ -27,39 +27,23 @@
 BEGIN_NAMESPACE(ofx)
 BEGIN_NAMESPACE(Serializer)
 namespace {
-    template <typename T>
-    struct has_serialize_impl {
-    private:
-        template <typename U>
-        static char check_method(DECLTYPE(&U::serialize));
-        template <typename>
-        static long check_method(...);
-    public:
-        static const bool value = (sizeof(check_method<T>(0)) == sizeof(char));
+#define DefineMethodChecker(method) \
+    template <typename T> \
+    struct has_##method##_impl { \
+    private: \
+        template <typename U> \
+        static char check_method(DECLTYPE(&U::method)); \
+        template <typename> \
+        static long check_method(...); \
+    public: \
+        static const bool value = (sizeof(check_method<T>(0)) == sizeof(char)); \
     };
+
+    DefineMethodChecker(serialize); // define struct has_serialize_impl
+    DefineMethodChecker(deserialize); // define struct has_deserialize_impl
+    DefineMethodChecker(jsonize); // define struct has_jsonize_impl
+#undef DefineMethodChecker
     
-    template <typename T>
-    struct has_deserialize_impl {
-    private:
-        template <typename U>
-        static char check_method(DECLTYPE(&U::deserialize));
-        template <typename>
-        static long check_method(...);
-    public:
-        static const bool value = (sizeof(check_method<T>(0)) == sizeof(char));
-    };
-
-    template <typename T>
-    struct has_jsonize_impl {
-    private:
-        template <typename U>
-        static char check_method(DECLTYPE(&U::jsonize));
-        template <typename>
-        static long check_method(...);
-    public:
-        static const bool value = (sizeof(check_method<T>(0)) == sizeof(char));
-    };
-
 #pragma mark type_filter predicate
     template <typename T>
     struct has_serialize {
