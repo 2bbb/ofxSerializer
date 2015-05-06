@@ -2,3 +2,4 @@
 *.app
 2bit.xcuserdatad/
 project.xcworkspace/xcuserdata
+*.serialized
