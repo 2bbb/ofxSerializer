@@ -61,10 +61,7 @@ void SerializeDefinedStructTest() {
     ofLogNotice("SerializeDefinedStructTest")
         << decode.next->id << ", "
         << decode.next->name << ", "
-        << decode.next->lifeTime << ", "
-        << decode.nums[0] << ", "
-        << decode.nums[1] << ", "
-        << decode.nums[2];
+        << decode.next->lifeTime;
     
     DerivedSerializable derivedDecode;
     derivedDecode.loadFromFile("encode1.serialized");
@@ -72,7 +69,10 @@ void SerializeDefinedStructTest() {
     ofLogNotice("SerializeDefinedStructTest")
         << derivedDecode.id << ", "
         << derivedDecode.name << ", "
-        << derivedDecode.lifeTime;
+        << derivedDecode.lifeTime << ", "
+        << derivedDecode.nums[0] << ", "
+        << derivedDecode.nums[1] << ", "
+        << derivedDecode.nums[2];
     for(int i = 0; i < derivedDecode.points.size(); i++) cout << "(" << derivedDecode.points[i].x << ", " << derivedDecode.points[i].y << ") ,";
     cout << endl;
     ofLogNotice("SerializeDefinedStructTest")
@@ -109,7 +109,7 @@ void JsonizeTest() {
     Jsonizable jsonizable;
     jsonizable.p = 10.0f;
     jsonizable.q = 20.0f;
-    for(int i = 0; i < 200; i += 3) jsonizable.ss.push_back(ofVAArgsToString("jsn_%03d", i));
+    for(int i = 0; i < 30; i += 3) jsonizable.ss.push_back(ofVAArgsToString("jsn_%03d", i));
     stringstream s("");
     jsonizable.jsonize(s);
     ofLogNotice("JsonizeTest") << s.str();
