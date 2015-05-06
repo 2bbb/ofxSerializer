@@ -61,7 +61,10 @@ void SerializeDefinedStructTest() {
     ofLogNotice("SerializeDefinedStructTest")
         << decode.next->id << ", "
         << decode.next->name << ", "
-        << decode.next->lifeTime;
+        << decode.next->lifeTime << ", "
+        << decode.nums[0] << ", "
+        << decode.nums[1] << ", "
+        << decode.nums[2];
     
     DerivedSerializable derivedDecode;
     derivedDecode.loadFromFile("encode1.serialized");
