@@ -11,7 +11,6 @@ struct Serializable {
     
     Serializable() : next(NULL)  {};
     
-//    DefineSerializeMethod(id, name, points, lifeTime, nums);
     DefineSerializeMethod(id, name, points, lifeTime, next, nums);
 };
 
@@ -20,12 +19,6 @@ struct DerivedSerializable : Serializable {
     
     DefineSerializeMethod(Super(Serializable, DerivedSerializable), space);
 };
-
-struct Z {
-    int x, y;
-};
-
-DefineSerializeFunction(Z, v, v.x, v.y);
 
 void SerializeDefinedStructTest() {
     Serializable encode1, *encode2 = new Serializable;
@@ -57,11 +50,25 @@ void SerializeDefinedStructTest() {
         << decode.nums[1] << ", "
         << decode.nums[2];
     for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i].x << ", " << decode.points[i].y << ") ,";
+    
+#define TEST_ASSERT(name) assert(encode1.name == decode.name);
+    TEST_ASSERT(id);
+    TEST_ASSERT(name);
+    for(int i = 0; i < 10; i++) TEST_ASSERT(points[i]);
+    TEST_ASSERT(lifeTime);
+    for(int i = 0; i < 3; i++) TEST_ASSERT(nums[i]);
+#undef TEST_ASSERT
+    
     cout << endl;
     ofLogNotice("SerializeDefinedStructTest")
         << decode.next->id << ", "
         << decode.next->name << ", "
         << decode.next->lifeTime;
+    
+#define TEST_ASSERT(name) assert(encode2->name == decode.next->name);
+    TEST_ASSERT(id);
+    TEST_ASSERT(name);
+#undef TEST_ASSERT
     
     DerivedSerializable derivedDecode;
     derivedDecode.loadFromFile("encode1.serialized");
@@ -74,16 +81,39 @@ void SerializeDefinedStructTest() {
         << derivedDecode.nums[1] << ", "
         << derivedDecode.nums[2];
     for(int i = 0; i < derivedDecode.points.size(); i++) cout << "(" << derivedDecode.points[i].x << ", " << derivedDecode.points[i].y << ") ,";
+    
+#define TEST_ASSERT(name) assert(encode1.name == derivedDecode.name);
+    TEST_ASSERT(id);
+    TEST_ASSERT(name);
+    for(int i = 0; i < 10; i++) TEST_ASSERT(points[i]);
+    TEST_ASSERT(lifeTime);
+    for(int i = 0; i < 3; i++) TEST_ASSERT(nums[i]);
+#undef TEST_ASSERT
+    
     cout << endl;
     ofLogNotice("SerializeDefinedStructTest")
         << derivedDecode.next->id << ", "
         << derivedDecode.next->name << ", "
         << derivedDecode.next->lifeTime;
+    
+#define TEST_ASSERT(name) assert(encode2->name == derivedDecode.next->name);
+    TEST_ASSERT(id);
+    TEST_ASSERT(name);
+#undef TEST_ASSERT
+    cout << endl;
 }
+
+struct Z {
+    int x, y;
+};
+
+DefineSerializeFunction(Z, v, v.x, v.y);
 
 struct W {
     Z z;
 };
+
+DefineSerializeFunction(W, w, w.z);
 
 void OtherStructTest() {
     stringstream s("");
@@ -96,6 +126,12 @@ void OtherStructTest() {
     
     ofLogNotice("OtherStructTest") << w1.z.x << ", " << w1.z.y;
     ofLogNotice("OtherStructTest") << w2.z.x << ", " << w2.z.y;
+    
+#define TEST_ASSERT(name) assert(w1.name == w2.name);
+    TEST_ASSERT(z.x);
+    TEST_ASSERT(z.y);
+#undef TEST_ASSERT
+    cout << endl;
 }
 
 struct Jsonizable {
