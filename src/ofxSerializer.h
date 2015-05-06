@@ -14,6 +14,16 @@
 
 #include "details/utils.h"
 
+#if (_MSC_VER)
+#   define DECLTYPE(...) decltype(__VA_ARGS__)
+#else
+#   if __cplusplus<201103L
+#       define DECLTYPE(...) typeof(__VA_ARGS__)
+#   else
+#       define DECLTYPE(...) decltype(__VA_ARGS__)
+#   endif
+#endif
+
 BEGIN_NAMESPACE(ofx)
 BEGIN_NAMESPACE(Serializer)
 namespace {
@@ -21,7 +31,7 @@ namespace {
     struct has_serialize_impl {
     private:
         template <typename U>
-        static char check_method(typeof(&U::serialize));
+        static char check_method(DECLTYPE(&U::serialize));
         template <typename>
         static long check_method(...);
     public:
@@ -32,7 +42,7 @@ namespace {
     struct has_deserialize_impl {
     private:
         template <typename U>
-        static char check_method(typeof(&U::deserialize));
+        static char check_method(DECLTYPE(&U::deserialize));
         template <typename>
         static long check_method(...);
     public:
@@ -43,7 +53,7 @@ namespace {
     struct has_jsonize_impl {
     private:
         template <typename U>
-        static char check_method(typeof(&U::jsonize));
+        static char check_method(DECLTYPE(&U::jsonize));
         template <typename>
         static long check_method(...);
     public:
