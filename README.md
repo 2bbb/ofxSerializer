@@ -4,7 +4,19 @@ binary serialize/deserialize & generate jsonized stream.
 
 ## *important*
 
-jsonize is **W.I.P.** now. (in other words, *imperfect*.)
+* jsonize is **W.I.P.** now. (in other words, *imperfect*.)
+* I check **only** Xcode6.3.x / Clang.
+* if
+
+```
+try {
+	you.use(otherEnvironment);
+} catch (const SomeError &error) {
+	you.contact(me);
+}
+```
+
+* please! m(\_ \_)m
 
 ## How to use?
 
