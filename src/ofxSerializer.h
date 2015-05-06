@@ -189,7 +189,7 @@ type_filter(is_object<T, has_deserialize>) deserialize(std::istream &is, T &v) {
 inline void deserialize(std::istream &is, std::string &v) {
     size_t length;
     deserialize(is, length);
-    v.resize(length);
+    v.resize(length - 1);
     
     is.read((char *)(v.data()), length);
 }
