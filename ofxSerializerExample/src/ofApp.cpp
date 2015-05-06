@@ -42,14 +42,16 @@ void SerializeDefinedStructTest() {
     Serializable decode;
     decode.deserialize(s);
     
+    stringstream logstream("");
+    for(int i = 0; i < decode.points.size(); i++) logstream << "(" << decode.points[i] << ") ,";
     ofLogNotice("SerializeDefinedStructTest")
         << decode.id << ", "
         << decode.name << ", "
         << decode.lifeTime << ", "
         << decode.nums[0] << ", "
         << decode.nums[1] << ", "
-        << decode.nums[2];
-    for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i] << ") ,";
+        << decode.nums[2] << ", "
+        << logstream.str();
     
 #define TEST_ASSERT(name) assert(encode1.name == decode.name);
     TEST_ASSERT(id);
@@ -59,7 +61,6 @@ void SerializeDefinedStructTest() {
     for(int i = 0; i < 3; i++) TEST_ASSERT(nums[i]);
 #undef TEST_ASSERT
     
-    cout << endl;
     ofLogNotice("SerializeDefinedStructTest")
         << decode.next->id << ", "
         << decode.next->name << ", "
@@ -73,14 +74,16 @@ void SerializeDefinedStructTest() {
     DerivedSerializable derivedDecode;
     derivedDecode.loadFromFile("encode1.serialized");
     
+    logstream.clear();
+    for(int i = 0; i < derivedDecode.points.size(); i++) logstream << "(" << derivedDecode.points[i] << ") ,";
     ofLogNotice("SerializeDefinedStructTest")
         << derivedDecode.id << ", "
         << derivedDecode.name << ", "
         << derivedDecode.lifeTime << ", "
         << derivedDecode.nums[0] << ", "
         << derivedDecode.nums[1] << ", "
-        << derivedDecode.nums[2];
-    for(int i = 0; i < derivedDecode.points.size(); i++) cout << "(" << derivedDecode.points[i] << ") ,";
+        << derivedDecode.nums[2] << ", "
+        << logstream.str();
     
 #define TEST_ASSERT(name) assert(encode1.name == derivedDecode.name);
     TEST_ASSERT(id);
@@ -90,7 +93,6 @@ void SerializeDefinedStructTest() {
     for(int i = 0; i < 3; i++) TEST_ASSERT(nums[i]);
 #undef TEST_ASSERT
     
-    cout << endl;
     ofLogNotice("SerializeDefinedStructTest")
         << derivedDecode.next->id << ", "
         << derivedDecode.next->name << ", "
