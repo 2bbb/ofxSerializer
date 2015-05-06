@@ -49,7 +49,7 @@ void SerializeDefinedStructTest() {
         << decode.nums[0] << ", "
         << decode.nums[1] << ", "
         << decode.nums[2];
-    for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i].x << ", " << decode.points[i].y << ") ,";
+    for(int i = 0; i < decode.points.size(); i++) cout << "(" << decode.points[i] << ") ,";
     
 #define TEST_ASSERT(name) assert(encode1.name == decode.name);
     TEST_ASSERT(id);
@@ -80,7 +80,7 @@ void SerializeDefinedStructTest() {
         << derivedDecode.nums[0] << ", "
         << derivedDecode.nums[1] << ", "
         << derivedDecode.nums[2];
-    for(int i = 0; i < derivedDecode.points.size(); i++) cout << "(" << derivedDecode.points[i].x << ", " << derivedDecode.points[i].y << ") ,";
+    for(int i = 0; i < derivedDecode.points.size(); i++) cout << "(" << derivedDecode.points[i] << ") ,";
     
 #define TEST_ASSERT(name) assert(encode1.name == derivedDecode.name);
     TEST_ASSERT(id);
@@ -162,6 +162,7 @@ public:
     
 private:
     float x, y;
+    
     DefineSerializeMethod(x, y);
 };
 
