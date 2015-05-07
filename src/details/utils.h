@@ -1,11 +1,3 @@
-//
-//  ofxSerializer_utils.h
-//  ofxSerializerExample
-//
-//  Created by ISHII 2bit on 2015/05/01.
-//
-//
-
 #pragma once
 
 namespace util {

@@ -1,8 +1,10 @@
+BEGIN_NAMESPACE(ofx)
+BEGIN_NAMESPACE(Serializer)
+
 #pragma mark Jsonizer
 
 inline std::ostream &json_key(std::ostream &os, const char * const key) {
-    os << "\"" << key << "\": ";
-    return os;
+    return os << "\"" << key << "\": ";
 }
 
 // bool
@@ -26,8 +28,7 @@ inline void jsonize(std::ostream &os, const char * const key, const std::string 
 // jsonizable object
 template <typename T>
 inline typename util::enable_if<has_jsonize_impl<T>::value>::type jsonize(std::ostream &os, const char * const key, const T &v) {
-    json_key(os, key) << "{";
-    v.jsonize(os);
+    v.jsonize(json_key(os, key) << "{");
     os << "}";
 };
 
@@ -75,5 +76,8 @@ inline void jsonize(std::ostream &os, const char * const key, const Arg1 &v, con
     jsonize(os << ", ", args ...);
 };
 #else
-#include "details/jsonize_oldcpp.h"
+#include "jsonize_oldcpp.h"
 #endif
+
+END_NAMESPACE(Serializer)
+END_NAMESPACE(ofx)
