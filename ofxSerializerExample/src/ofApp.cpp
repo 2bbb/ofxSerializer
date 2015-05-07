@@ -153,11 +153,93 @@ void JsonizeTest() {
     ofLogNotice("JsonizeTest") << s.str();
 }
 
+inline void clearStringStream(stringstream &ss) {
+    ss.str("");
+    ss.clear(stringstream::goodbit);
+}
+
+template <typename From, typename To>
+inline void testSerialize(stringstream &ss, const From &from, To &to) {
+    ofxSerializer::serialize(ss, from);
+    ofxSerializer::deserialize(ss, to);
+    clearStringStream(ss);
+}
+
+void ofMathTypesTest() {
+    stringstream s;
+    
+    {
+        ofVec2f v2s(2.1f, 2.2f), v2d;
+        ofVec3f v3s(3.1f, 3.2f, 3.3f), v3d;
+        ofVec4f v4s(4.1f, 4.2f, 4.3f, 4.4f), v4d;
+        
+        {
+            testSerialize(s, v2s, v2d);
+            assert(v2s.x == v2d.x && v2s.y == v2d.y);
+            
+            testSerialize(s, v2s, v3d);
+            assert(v2s.x == v3d.x && v2s.y == v3d.y);
+
+            testSerialize(s, v2s, v4d);
+            assert(v2s.x == v4d.x && v2s.y == v4d.y);
+        }
+        
+        {
+            testSerialize(s, v3s, v2d);
+            assert(v3s.x == v2d.x && v3s.y == v2d.y);
+            
+            testSerialize(s, v3s, v3d);
+            assert(v3s.x == v3d.x && v3s.y == v3d.y && v3s.z == v3d.z);
+            
+            testSerialize(s, v3s, v4d);
+            assert(v3s.x == v4d.x && v3s.y == v4d.y && v3s.z == v4d.z);
+        }
+        
+        {
+            testSerialize(s, v4s, v2d);
+            assert(v4s.x == v2d.x && v4s.y == v2d.y);
+            
+            testSerialize(s, v4s, v3d);
+            assert(v4s.x == v3d.x && v4s.y == v3d.y && v4s.z == v3d.z);
+
+            testSerialize(s, v4s, v4d);
+            assert(v4s.x == v4d.x && v4s.y == v4d.y && v4s.z == v4d.z && v4s.w == v4d.w);
+        }
+    }
+    
+    {
+        ofMatrix3x3 mat3x3s(1.1f, 1.2f, 1.3f,
+                            2.1f, 2.1f, 2.3f,
+                            3.1f, 3.1f, 3.3f),
+                    mat3x3d;
+        testSerialize(s, mat3x3s, mat3x3d);
+        assert(   mat3x3s.a == mat3x3d.a && mat3x3s.b == mat3x3d.b && mat3x3s.c == mat3x3d.c
+               && mat3x3s.d == mat3x3d.d && mat3x3s.e == mat3x3d.e && mat3x3s.f == mat3x3d.f
+               && mat3x3s.g == mat3x3d.g && mat3x3s.h == mat3x3d.h && mat3x3s.i == mat3x3d.i);
+        
+        ofMatrix4x4 mat4x4s(1.1f, 1.2f, 1.3f, 1.4f,
+                            2.1f, 2.2f, 2.3f, 2.4f,
+                            3.1f, 3.2f, 3.3f, 3.4f,
+                            4.1f, 4.2f, 4.3f, 4.4f),
+                    mat4x4d;
+        testSerialize(s, mat4x4s, mat4x4d);
+        for(int i = 0; i < 16; i++) assert(mat4x4s(i / 4, i % 4) == mat4x4d(i / 4, i % 4));
+        
+        ofQuaternion qs(1.1f, 2.2f, 3.3f, 4.4f), qd;
+        testSerialize(s, qs, qd);
+        assert(   qs.x() == qd.x()
+               && qs.y() == qd.y()
+               && qs.z() == qd.z()
+               && qs.w() == qd.w());
+    }
+}
+
 class ofApp : public ofBaseApp {
 public:
     void setup() {
         SerializeDefinedStructTest();
         OtherStructTest();
+        ofMathTypesTest();
         JsonizeTest();
         ofExit();
     }
@@ -170,11 +252,6 @@ private:
 
 //========================================================================
 int main( ){
-    ofSetupOpenGL(1024,768,OF_WINDOW);			// <-------- setup the GL context
-    
-    // this kicks off the running of my app
-    // can be OF_WINDOW or OF_FULLSCREEN
-    // pass in width and height too:
-    ofRunApp(new ofApp());
-    
+    ofSetupOpenGL(1024, 768, OF_WINDOW);
+    ofRunApp(new ofApp);
 }
