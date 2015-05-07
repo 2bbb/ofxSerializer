@@ -256,9 +256,6 @@ inline void deserialize(std::istream &is, Arg &arg, Args& ... args) {
 END_NAMESPACE(Serializer)
 END_NAMESPACE(ofx)
 
-#undef BEGIN_NAMESPACE
-#undef END_NAMESPACE
-
 #pragma mark main
 
 namespace ofxSerializer = ofx::Serializer;
@@ -324,3 +321,111 @@ DefineSerializeFunction(ofVec4f, p, p.x, p.y, p.z, p.w);
 DefineSerializeFunction(ofColor, c, c.r, c.g, c.b, c.a);
 DefineSerializeFunction(ofFloatColor, c, c.r, c.g, c.b, c.a);
 DefineSerializeFunction(ofRectangle, rect, rect.x, rect.y, rect.width, rect.height);
+
+BEGIN_NAMESPACE(ofx)
+BEGIN_NAMESPACE(Serializer)
+
+inline void serialize(std::ostream &os, const ofMeshFace &mesh) {
+    serialize(os, mesh.hasColors());
+    serialize(os, mesh.hasNormals());
+    serialize(os, mesh.hasTexcoords());
+    for(int i = 0; i < 3; i++) {
+        serialize(os, mesh.getVertex(i));
+        if(mesh.hasNormals()) serialize(os, mesh.getNormal(i));
+        if(mesh.hasColors()) serialize(os, mesh.getColor(i));
+        if(mesh.hasTexcoords()) serialize(os, mesh.getTexCoord(i));
+    }
+}
+
+inline void deserialize(std::istream &is, ofMeshFace &mesh) {
+    bool hasColors, hasNormals, hasTexcoords;
+    deserialize(is, hasColors);
+    mesh.setHasColors(hasColors);
+    deserialize(is, hasNormals);
+    mesh.setHasNormals(hasNormals);
+    deserialize(is, hasTexcoords);
+    mesh.setHasTexcoords(hasTexcoords);
+    
+    ofVec3f vertex, normal;
+    ofFloatColor color;
+    ofVec2f texcoord;
+    
+    for(int i = 0; i < 3; i++) {
+        deserialize(is, vertex);
+        if(hasNormals) {
+            deserialize(is, normal);
+            mesh.setNormal(i, normal);
+        }
+        if(hasColors) {
+            deserialize(is, color);
+            mesh.setColor(i, color);
+        }
+        if(hasTexcoords) {
+            deserialize(is, texcoord);
+            mesh.setTexCoord(i, texcoord);
+        }
+    }
+}
+
+enum ofMeshSerializeState {
+    MeshDefault = 0,
+    MeshHasVertices   = 1 << 0,
+    MeshHasColors     = 1 << 1,
+    MeshHasNormals    = 1 << 2,
+    MeshHasTexCoords  = 1 << 3,
+    MeshHasIndices    = 1 << 4,
+    MeshUsingColors   = 1 << 5,
+    MeshUsingTextures = 1 << 6,
+    MeshUsingNormals  = 1 << 7,
+    MeshUsingIndices  = 1 << 8
+};
+
+inline void serialize(std::ostream &os, const ofMesh &mesh) {
+    uint16_t state;
+    state = (mesh.hasVertices()   ? MeshHasVertices   : 0)
+          | (mesh.hasColors()     ? MeshHasColors     : 0)
+          | (mesh.hasNormals()    ? MeshHasNormals    : 0)
+          | (mesh.hasTexCoords()  ? MeshHasTexCoords  : 0)
+          | (mesh.hasIndices()    ? MeshHasIndices    : 0)
+          | (mesh.usingColors()   ? MeshUsingColors   : 0)
+          | (mesh.usingTextures() ? MeshUsingTextures : 0)
+          | (mesh.usingNormals()  ? MeshUsingNormals  : 0)
+          | (mesh.usingIndices()  ? MeshUsingIndices  : 0);
+    serialize(os, state);
+    
+    if(mesh.hasVertices())  serialize(os, mesh.getVertices());
+    if(mesh.hasColors())    serialize(os, mesh.getColors());
+    if(mesh.hasNormals())   serialize(os, mesh.getNormals());
+    if(mesh.hasTexCoords()) serialize(os, mesh.getTexCoords());
+    if(mesh.hasIndices())   serialize(os, mesh.getIndices());
+}
+
+inline void deserialize(std::istream &is, ofMesh &mesh) {
+    mesh.clear();
+    uint16_t state;
+    deserialize(is, state);
+    
+    if(state & MeshHasVertices)  deserialize(is, mesh.getVertices());
+    if(state & MeshHasColors)    deserialize(is, mesh.getColors());
+    if(state & MeshHasNormals)   deserialize(is, mesh.getNormals());
+    if(state & MeshHasTexCoords) deserialize(is, mesh.getTexCoords());
+    if(state & MeshHasIndices)   deserialize(is, mesh.getIndices());
+    
+    if(state & MeshUsingColors)   mesh.enableColors();
+    else                          mesh.disableColors();
+    
+    if(state & MeshUsingTextures) mesh.enableTextures();
+    else                          mesh.disableTextures();
+    
+    if(state & MeshUsingNormals)  mesh.enableNormals();
+    else                          mesh.disableNormals();
+    
+    if(state & MeshUsingIndices)  mesh.enableIndices();
+    else                          mesh.disableNormals();
+}
+
+END_NAMESPACE(Serializer)
+END_NAMESPACE(ofx)
+
+#undef BEGIN_NAMESPACE
+#undef END_NAMESPACE
