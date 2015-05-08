@@ -28,5 +28,7 @@ namespace ofxSerializer = ofx::Serializer;
 #include "details/implementation_macros.h"
 #include "ofType/includes.h"
 
+#include "details/archiver.h"
+
 #undef BEGIN_NAMESPACE
 #undef END_NAMESPACE
