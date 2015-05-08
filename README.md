@@ -24,6 +24,9 @@ See example.
 
 ## Update history
 
+### 2015/05/08 ver 0.02 release
+* add ofxSerializer::Archiver
+ 
 ### 2015/05/01 ver 0.01 release
 
 ## License
