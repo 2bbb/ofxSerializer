@@ -3,3 +3,4 @@
 2bit.xcuserdatad/
 project.xcworkspace/xcuserdata
 *.serialized
+*.bin

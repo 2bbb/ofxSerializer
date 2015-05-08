@@ -73,6 +73,7 @@
 		95DEA35C1AFB68C000ED9226 /* deserialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = deserialize.h; sourceTree = "<group>"; };
 		95DEA35D1AFB69EA00ED9226 /* type_filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = type_filter.h; sourceTree = "<group>"; };
 		95DEA35E1AFB6A6800ED9226 /* implementation_macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = implementation_macros.h; sourceTree = "<group>"; };
+		95DEA35F1AFC9BB700ED9226 /* archiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = archiver.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -155,6 +156,7 @@
 				95DEA35D1AFB69EA00ED9226 /* type_filter.h */,
 				95DEA35E1AFB6A6800ED9226 /* implementation_macros.h */,
 				95DEA2AF1AF3723700ED9226 /* jsonize_macros.h */,
+				95DEA35F1AFC9BB700ED9226 /* archiver.h */,
 			);
 			path = details;
 			sourceTree = "<group>";

@@ -213,9 +213,7 @@ void ofMathTypesTest() {
                             3.1f, 3.1f, 3.3f),
                     mat3x3d;
         testSerialize(s, mat3x3s, mat3x3d);
-        assert(   mat3x3s.a == mat3x3d.a && mat3x3s.b == mat3x3d.b && mat3x3s.c == mat3x3d.c
-               && mat3x3s.d == mat3x3d.d && mat3x3s.e == mat3x3d.e && mat3x3s.f == mat3x3d.f
-               && mat3x3s.g == mat3x3d.g && mat3x3s.h == mat3x3d.h && mat3x3s.i == mat3x3d.i);
+        for(int i = 0; i < 9; i++) assert(mat3x3s[i] == mat3x3d[i]);
         
         ofMatrix4x4 mat4x4s(1.1f, 1.2f, 1.3f, 1.4f,
                             2.1f, 2.2f, 2.3f, 2.4f,
@@ -234,6 +232,8 @@ void ofMathTypesTest() {
     }
 }
 
+static const int particleSize = 100;
+
 class ofApp : public ofBaseApp {
 public:
     void setup() {
@@ -241,13 +241,57 @@ public:
         OtherStructTest();
         ofMathTypesTest();
         JsonizeTest();
-        ofExit();
+        
+//        ofExit();
+        
+        ofEnableAlphaBlending();
+        ofEnableSmoothing();
+        
+        for(int i = 0; i < particleSize; i++) {
+            points[i].set(ofRandomWidth(), ofRandomHeight());
+            accels[i].set(ofRandomf(), ofRandomf());
+        }
+        
+        archiver.setup();
+        seed = ofRandom(0, 65535);
+        archiver.insert("points", points);
+        archiver.insert("accels", accels);
+        archiver.insert("seed", seed);
+        
+        ofSeedRandom(seed);
+    }
+    
+    void update() {
+        for(int i = 0; i < particleSize; i++) {
+            points[i] += accels[i];
+            accels[i] += ofRandomf() * 0.1f;
+        }
+    }
+    
+    void draw() {
+        ofBackground(0);
+        ofSetColor(255, 128);
+        for(int i = 0; i < particleSize; i++) {
+            ofCircle(points[i], 3.0f);
+        }
+    }
+    
+    void keyPressed(int key) {
+        if(key == ' ') {
+            archiver.snapshot();
+        } else if(key == OF_KEY_RETURN) {
+            archiver.reloadLastArchive();
+            ofSeedRandom(seed);
+        }
     }
     
 private:
     float x, y;
-    
     DefineSerializeMethod(x, y);
+    ofPoint points[particleSize];
+    ofVec2f accels[particleSize];
+    int seed;
+    ofxSerializer::Archiver archiver;
 };
 
 //========================================================================
