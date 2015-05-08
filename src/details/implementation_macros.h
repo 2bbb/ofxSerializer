@@ -45,7 +45,6 @@ static_cast<Type &>( \
 
 #define DefineJsonizeMethod(...) \
 inline void jsonize(std::ostream &os) const { \
-    os << "{"; \
-    ofxSerializer::jsonize(os, MakeStringifiedPair(__VA_ARGS__)); \
+    ofxSerializer::jsonize(os << "{", MakeStringifiedPair(__VA_ARGS__)); \
     os << "}"; \
 };
