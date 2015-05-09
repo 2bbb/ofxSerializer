@@ -270,7 +270,13 @@ public:
     
     void draw() {
         ofBackground(0);
+        ofSetColor(255);
+        
+        ofDrawBitmapString("Press Space : take snapshot", ofPoint(10, 20));
+        ofDrawBitmapString("Press Enter : load last snapshot", ofPoint(10, 40));
+        
         ofSetColor(255, 128);
+        
         for(int i = 0; i < particleSize; i++) {
             ofCircle(points[i], 3.0f);
         }
@@ -286,11 +292,10 @@ public:
     }
     
 private:
-    float x, y;
-    DefineSerializeMethod(x, y);
     ofPoint points[particleSize];
     ofVec2f accels[particleSize];
     int seed;
+    DefineSerializeMethod(points, accels, seed);
     ofxSerializer::Archiver archiver;
 };
 

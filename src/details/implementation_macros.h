@@ -7,13 +7,13 @@
     }; \
     inline void saveToFile(const std::string &filePath) const { \
         std::ofstream ofs; \
-        ofs.open(ofToDataPath(filePath, true).c_str(), std::ios::out | std::ios::binary);\
-        serialize(ofs);\
+        ofs.open(ofToDataPath(filePath, true).c_str(), std::ios::out | std::ios::binary); \
+        serialize(ofs); \
     }; \
     inline void loadFromFile(const std::string &filePath) { \
         std::ifstream ifs; \
-        ifs.open(ofToDataPath(filePath, true).c_str(), std::ios::in);\
-        deserialize(ifs);\
+        ifs.open(ofToDataPath(filePath, true).c_str(), std::ios::in); \
+        deserialize(ifs); \
     };
 
 #define DefineSerializeFunction(Type, name, ...) \
